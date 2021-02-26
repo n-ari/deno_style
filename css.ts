@@ -28,7 +28,7 @@ let customCallback: undefined | ((id: string, style: string) => void) =
 const styleHash = (str: string) => {
   const hash = createHash("md5");
   hash.update(str);
-  return hash.toString().slice(0, 8);
+  return "ds-" + hash.toString().slice(0, 8);
 };
 
 export function css(props: Properties) {
@@ -50,7 +50,7 @@ export function styled<P>(
   if (typeof Tag === "string") {
     return (
       props:
-        & { children: VNode | VNode[] }
+        & { children?: VNode | VNode[] }
         & JSX.SVGAttributes
         & JSX.HTMLAttributes,
     ) => h(Tag, { class: id, ...props });
