@@ -1,0 +1,9 @@
+{
+  "imports": {
+    "http": "https://deno.land/std@0.88.0/http/mod.ts",
+    "uuid": "https://deno.land/std@0.88.0/uuid/mod.ts",
+    "preact": "https://esm.sh/preact@10.5.12",
+    "preact-render-to-string": "https://esm.sh/preact-render-to-string?external=preact@5.1.12",
+    "htm": "https://esm.sh/htm@3.0.4"
+  }
+}
