@@ -23,8 +23,9 @@ function parse(props: Properties): string {
   return output;
 }
 const styleStore: Record<string, string> = {};
-let customCallback: undefined | ((id: string, style: string) => void) =
-  undefined;
+let customCallback:
+  | undefined
+  | ((id: string, style: string, store: typeof styleStore) => void) = undefined;
 const styleHash = (str: string) => {
   const hash = ripemd160(str);
   return "ds-" + hash.slice(0, 8);
@@ -34,7 +35,7 @@ export function css(props: Properties) {
   const styles = parse(props);
   const hash = styleHash(styles);
   if (customCallback) {
-    customCallback(hash, styles);
+    customCallback(hash, styles, styleStore);
   } else {
     styleStore[hash] = styles;
   }
@@ -70,8 +71,6 @@ export function getSheet() {
   }
   return output;
 }
-export function setCallback(
-  cb: undefined | ((id: string, style: string) => void),
-) {
+export function setCallback(cb: typeof customCallback) {
   customCallback = cb;
 }
