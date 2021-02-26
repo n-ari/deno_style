@@ -1,4 +1,4 @@
-import { createHash } from "https://deno.land/std@0.88.0/hash/mod.ts";
+import ripemd160 from "https://deno.land/x/ripemd160@0.1.1/index.ts";
 import {
   FunctionComponent,
   h,
@@ -26,9 +26,8 @@ const styleStore: Record<string, string> = {};
 let customCallback: undefined | ((id: string, style: string) => void) =
   undefined;
 const styleHash = (str: string) => {
-  const hash = createHash("md5");
-  hash.update(str);
-  return "ds-" + hash.toString().slice(0, 8);
+  const hash = ripemd160(str);
+  return "ds-" + hash.slice(0, 8);
 };
 
 export function css(props: Properties) {
