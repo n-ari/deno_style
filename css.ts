@@ -13,6 +13,10 @@ import type {
 export interface Properties extends _Properties {
   [key: string]: number | string | undefined | Properties;
 }
+export type Attributes =
+  & { children?: VNode | VNode[] }
+  & JSX.SVGAttributes
+  & JSX.HTMLAttributes;
 
 function styleHash(str: string) {
   const hash = ripemd160(str);
@@ -61,23 +65,12 @@ export function styled<P>(
 ) {
   const id = css(style);
   if (typeof Tag === "string") {
-    return (
-      props:
-        & { children?: VNode | VNode[] }
-        & JSX.SVGAttributes
-        & JSX.HTMLAttributes,
-    ) => {
+    return (props: Attributes) => {
       const mergedClass = props.class ? `${props.class} ${id}` : id;
       return h(Tag, { ...props, class: mergedClass });
     };
   } else {
-    return (
-      props:
-        & RenderableProps<P>
-        & { children?: VNode | VNode[] }
-        & JSX.SVGAttributes
-        & JSX.HTMLAttributes,
-    ) => {
+    return (props: RenderableProps<P> & Attributes) => {
       const mergedClass = props.class ? `${props.class} ${id}` : id;
       return h(Tag, { ...props, class: mergedClass });
     };
