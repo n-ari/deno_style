@@ -1,4 +1,4 @@
-import { Fragment, h, JSX, VNode } from "preact";
+import { Fragment, h } from "preact";
 import htm from "htm";
 import { css, styled } from "./css.ts";
 
@@ -8,39 +8,42 @@ function html(strings: TemplateStringsArray, ...values: any[]) {
   return Array.isArray(root) ? h(Fragment, {}, root) : root;
 }
 
-// --- app ---
-
 const classes = {
+  head: css({
+    fontSize: "2rem",
+  }),
   paragraph: css({
-    backgroundColor: "red",
-    fontWeight: "bold",
+    fontSize: "1.2rem",
   }),
 };
 
+const Button = styled("a", {
+  display: "inline-block",
+  margin: "0.5rem",
+  padding: "1rem",
+  textDecoration: "none",
+  color: "#fafafa",
+  backgroundColor: "#757575",
+  border: "solid 1px transparent",
+  transition: "0.2s",
+  "&:hover": {
+    border: "solid 1px #212121",
+    color: "#212121",
+    backgroundColor: "#fafafa",
+  },
+});
+const BlueButton = styled(Button, {
+  backgroundColor: "#3f51b5",
+  "&:hover": {
+    backgroundColor: "#e8eaf6",
+  },
+});
+
 export default function App() {
   return html`
-    <h1>deno_style</h1>
-    <p class=${classes.paragraph}>styled paragraph</p>
-    <${StyledComponent}>styled component<//>
-    <${StyledLorem} />
+    <h1 class="${classes.head}">Heading</h1>
+    <p class="${classes.paragraph}">Hello, world</p>
+    <${Button} href="#">styled button<//>
+    <${BlueButton} href="#">more styled button<//>
   `;
 }
-
-const StyledComponent = styled("p", {
-  fontSize: "2rem",
-  fontStyle: "italic",
-});
-
-const Lorem = (
-  props:
-    & { children?: VNode | VNode[] }
-    & JSX.SVGAttributes
-    & JSX.HTMLAttributes,
-) =>
-  html
-    `<p ...${props}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed iaculis bibendum augue in commodo. Vivamus scelerisque facilisis iaculis. Aenean non nisi nisl. Donec at massa fringilla, ultricies magna sit amet, sagittis velit. Nulla fringilla ut nulla nec pretium. Sed vitae molestie velit. Curabitur scelerisque bibendum dolor, et condimentum enim pharetra vitae.</p>`;
-
-const StyledLorem = styled(Lorem, {
-  fontSize: "0.5rem",
-  fontWeight: 600,
-});
