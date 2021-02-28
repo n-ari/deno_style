@@ -3,9 +3,12 @@ import {
   FunctionComponent,
   h,
   JSX,
+  Ref,
   RenderableProps,
   VNode,
-} from "https://esm.sh/preact@10.5.12";
+} from "https://cdn.skypack.dev/preact@10.5.12?dts";
+// @deno-types=https://cdn.esm.sh/v15/preact@10.5.12/compat/src/index.d.ts
+import { forwardRef } from "https://cdn.skypack.dev/preact@10.5.12/compat";
 import type {
   Properties as _Properties,
 } from "https://raw.githubusercontent.com/frenic/csstype/master/index.d.ts";
@@ -15,7 +18,6 @@ export interface Properties extends _Properties {
 }
 export type Attributes =
   & { children?: VNode | VNode[] }
-  & JSX.SVGAttributes
   & JSX.HTMLAttributes;
 
 function styleHash(str: string) {
@@ -65,15 +67,17 @@ export function styled<P>(
 ) {
   const id = css(style);
   if (typeof Tag === "string") {
-    return (props: Attributes) => {
-      const mergedClass = props.class ? `${props.class} ${id}` : id;
-      return h(Tag, { ...props, class: mergedClass });
-    };
+    return forwardRef(
+      (props: Attributes, ref: Ref<EventTarget> & Ref<SVGElement>) => {
+        const mergedClass = props.class ? `${props.class} ${id}` : id;
+        return h(Tag, { ...props, class: mergedClass, ref });
+      },
+    );
   } else {
-    return (props: RenderableProps<P> & Attributes) => {
+    return forwardRef((props: RenderableProps<P> & Attributes, ref) => {
       const mergedClass = props.class ? `${props.class} ${id}` : id;
-      return h(Tag, { ...props, class: mergedClass });
-    };
+      return h(Tag, { ...props, class: mergedClass, ref });
+    });
   }
 }
 export function resetSheet() {
